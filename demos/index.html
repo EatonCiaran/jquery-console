@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="./css/main.css" type="text/css" />
+    <link rel="stylesheet" href="../src/jquery.console.css" type="text/css" />
+
+    <title>jQuery Console Plugin</title>
+</head>
+
+<body>
+    <header>
+        <div id="header">
+            <h1>jQuery Console Plugin</h1>
+        </div>
+    </header>
+
+    <noscript>
+        This page requires Javascript. You're seeing this message as you have Javascript disabled.
+    </noscript>
+
+    <main>
+        <h2>New messages placed at the top</h2>
+        <div class="console1"></div>
+
+        <h2>New messages placed at the bottom and limited history of 15 messages</h2>
+        <div class="console2"></div>
+
+        <h2>No timestamp and messages timeout after 3 seconds</h2>
+        <div class="console3"></div>
+    </main>
+
+    <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script language="javascript" type="text/javascript" src="../src/jquery.console.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Init the consoles
+            let con1 = $(".console1").console({ msgDirection: "up" });
+            let con2 = $(".console2").console({ history: 15 });
+            let con3 = $(".console3").console({ msgDirection: "up", showTimestamp: false, timeout: 3000 });
+
+            // Sample messages to show off the different log levels
+            let long_txt = "This is very long alert message. This is very long alert message. This is very long alert message. "
+                + "This is very long alert message. This is very long alert message. This is very long alert message. "
+                + "This is very long alert message. This is very long alert message. This is very long alert message.";
+            let msgs = [
+                { txt: "This is a debug message.", level: 7 },
+                { txt: "This is an info message.", level: 6 },
+                { txt: "This is a notice message.", level: 5 },
+                { txt: "This is a warning message.", level: "warning" },    // can use choose using str or int
+                { txt: "This is an error message.", level: 3 },
+                { txt: "This is a critical message.", level: 2 },
+                { txt: "This is an alert message.", level: 1 },
+                { txt: "This is an emergency message.", level: 0 },
+                { txt: "This is a default message." },                      // no level needs to be provided
+                { txt: long_txt, level: 1 }
+            ];
+
+            // Generator implementation of writing a message every second from the message array
+            function* get_message() {
+                let index = 0;
+                while (true) {
+                    let msg = msgs[index];
+                    index = (index + 1) % msgs.length;  // inc index but cycle back to the start if at the end of the list
+                    yield msg;
+                }
+            }
+            let msg_generator = get_message();
+            
+            function writeMessage() {
+                let msg = msg_generator.next().value;
+                if ("level" in msg) {
+                    con1.log(msg["txt"], msg["level"]);
+                    con2.log(msg["txt"], msg["level"]);
+                    con3.log(msg["txt"], msg["level"]);
+                }
+                else {
+                    con1.log(msg["txt"]);
+                    con2.log(msg["txt"]);
+                    con3.log(msg["txt"]);
+                }
+            }
+            let tid = setInterval(writeMessage, 1000);
+
+
+            /* 
+            TODO: Decide if generator or closure implementation is easier to understand and maintain.
+
+            // Closure implementation of writing a message every second from the message array
+            const writeMessage = (function () {
+                let index = 0;
+                return function () {
+                    let msg = msgs[index];
+                    if ("level" in msg) {
+                        con1.log(msg["txt"], msg["level"]);
+                        con2.log(msg["txt"], msg["level"]);
+                        con3.log(msg["txt"], msg["level"]);
+                    }
+                    else {
+                        con1.log(msg["txt"]);
+                        con2.log(msg["txt"]);
+                        con3.log(msg["txt"]);
+                    }
+                    index = (index + 1) % msgs.length;
+                    return index;
+                }
+            })();
+            let tid = setInterval(writeMessage, 1000);
+            */
+        });
+    </script>
+</body>
+
+</html>
