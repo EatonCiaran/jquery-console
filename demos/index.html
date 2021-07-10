@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="./css/main.css" type="text/css" />
-    <link rel="stylesheet" href="../src/jquery.console.css" type="text/css" />
+    <link rel="stylesheet" href="./main.css" type="text/css" />
+    <link rel="stylesheet" href="../dist/jquery.console.min.css" type="text/css" />
 
     <title>jQuery Console Plugin</title>
 </head>
@@ -30,10 +30,13 @@
 
         <h2>No timestamp and messages timeout after 3 seconds</h2>
         <div class="console3"></div>
+
+        <h2>Odd even tagging, timestamp on left side</h2>
+        <div class="console4"></div>
     </main>
 
     <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
-    <script language="javascript" type="text/javascript" src="../src/jquery.console.js"></script>
+    <script language="javascript" type="text/javascript" src="../dist/jquery.console.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -41,6 +44,7 @@
             let con1 = $(".console1").console({ msgDirection: "up" });
             let con2 = $(".console2").console({ history: 15 });
             let con3 = $(".console3").console({ msgDirection: "up", showTimestamp: false, timeout: 3000 });
+            let con4 = $(".console4").console({ tagOddEven: true, timestampOnLeft: true });
 
             // Sample messages to show off the different log levels
             let long_txt = "This is very long alert message. This is very long alert message. This is very long alert message. "
@@ -76,40 +80,16 @@
                     con1.log(msg["txt"], msg["level"]);
                     con2.log(msg["txt"], msg["level"]);
                     con3.log(msg["txt"], msg["level"]);
+                    con4.log(msg["txt"], msg["level"]);
                 }
                 else {
                     con1.log(msg["txt"]);
                     con2.log(msg["txt"]);
                     con3.log(msg["txt"]);
+                    con4.log(msg["txt"]);
                 }
             }
-            let tid = setInterval(writeMessage, 1000);
-
-
-            /* 
-            TODO: Decide if generator or closure implementation is easier to understand and maintain.
-
-            // Closure implementation of writing a message every second from the message array
-            const writeMessage = (function () {
-                let index = 0;
-                return function () {
-                    let msg = msgs[index];
-                    if ("level" in msg) {
-                        con1.log(msg["txt"], msg["level"]);
-                        con2.log(msg["txt"], msg["level"]);
-                        con3.log(msg["txt"], msg["level"]);
-                    }
-                    else {
-                        con1.log(msg["txt"]);
-                        con2.log(msg["txt"]);
-                        con3.log(msg["txt"]);
-                    }
-                    index = (index + 1) % msgs.length;
-                    return index;
-                }
-            })();
-            let tid = setInterval(writeMessage, 1000);
-            */
+            let tid = setInterval(writeMessage, 500);
         });
     </script>
 </body>
