@@ -11,6 +11,7 @@
     padding: 0 0.5em 0 0.5em;
 }
 
+/* message content */
 .jquery-console-msg {
     display: inline-block;
     word-break: break-all;
@@ -18,7 +19,8 @@
     width: 100%;
 }
 
-.jquery-console-msg-nots {
+/* timestamped message */
+.jquery-console-msg-ts {
     float: left;
     width: 90%;
 }
@@ -29,8 +31,27 @@
     width: 10%;
 }
 
+/* timestamp on the left */
+.jquery-console-msg-ts-left {
+    float: right;
+    width: 94%;
+}
+.jquery-console-timestamp-left {
+    display: inline-block;
+    text-align: left;
+    width: 5%;
+}
+
+.jquery-console-odd {
+    background-color: #d6d6d6;
+}
+
+.jquery-console-even {
+    background-color: #FFFFFF;
+}
+
 .jquery-console-lvl-debug {
-    color: #D2D2D2;
+    color: #868686;
 }
 
 .jquery-console-lvl-info {
